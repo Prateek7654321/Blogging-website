@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
+import { BACKEND_URL } from "../util"; // import backend URL
 
 function UpdateBlog() {
   const navigateTo = useNavigate();
@@ -10,42 +11,34 @@ function UpdateBlog() {
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("");
   const [about, setAbout] = useState("");
-
-  const [blogImage, setBlogImage] = useState("");
+  const [blogImage, setBlogImage] = useState(null);
   const [blogImagePreview, setBlogImagePreview] = useState("");
 
   const changePhotoHandler = (e) => {
-    console.log(e);
     const file = e.target.files[0];
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => {
-      setBlogImagePreview(reader.result);
-      setBlogImage(file);
-    };
+    if (file) {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        setBlogImagePreview(reader.result);
+        setBlogImage(file);
+      };
+    }
   };
 
   useEffect(() => {
     const fetchBlog = async () => {
       try {
         const { data } = await axios.get(
-          `http://localhost:4001/api/blogs/single-blog/${id}`,
-
-          {
-            withCredentials: true,
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
+          `${BACKEND_URL}/api/blogs/single-blog/${id}`,
+          { withCredentials: true }
         );
-        console.log(data);
-        setTitle(data?.title);
-        setCategory(data?.category);
-        setAbout(data?.about);
-        setBlogImage(data?.blogImage.url);
+        setTitle(data?.title || "");
+        setCategory(data?.category || "");
+        setAbout(data?.about || "");
+        setBlogImagePreview(data?.blogImage?.url || "");
       } catch (error) {
-        console.log(error);
-        toast.error("Please fill the required fields");
+        toast.error("Failed to load blog details");
       }
     };
     fetchBlog();
@@ -53,31 +46,31 @@ function UpdateBlog() {
 
   const handleUpdate = async (e) => {
     e.preventDefault();
+
+    if (!title || !category || !about || about.length < 200) {
+      toast.error("Please fill all fields correctly (at least 200 characters for 'about').");
+      return;
+    }
+
     const formData = new FormData();
     formData.append("title", title);
     formData.append("category", category);
     formData.append("about", about);
-
     formData.append("blogImage", blogImage);
+
     try {
       const { data } = await axios.put(
-        `http://localhost:4001/api/blogs/update/${id}`,
+        `${BACKEND_URL}/api/blogs/update/${id}`,
         formData,
         {
           withCredentials: true,
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
+          headers: { "Content-Type": "multipart/form-data" },
         }
       );
-      console.log(data);
       toast.success(data.message || "Blog updated successfully");
       navigateTo("/");
     } catch (error) {
-      console.log(error);
-      toast.error(
-        error.response.data.message || "Please fill the required fields"
-      );
+      toast.error(error?.response?.data?.message || "Blog update failed");
     }
   };
 
@@ -86,7 +79,7 @@ function UpdateBlog() {
       <div className="container mx-auto my-12 p-4">
         <section className="max-w-2xl mx-auto">
           <h3 className="text-2xl font-bold mb-6">UPDATE BLOG</h3>
-          <form>
+          <form onSubmit={handleUpdate}>
             <div className="mb-4">
               <label className="block mb-2 font-semibold">Category</label>
               <select
@@ -102,6 +95,7 @@ function UpdateBlog() {
                 <option value="Business">Business</option>
               </select>
             </div>
+
             <input
               type="text"
               placeholder="BLOG MAIN TITLE"
@@ -109,14 +103,13 @@ function UpdateBlog() {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
             />
+
             <div className="mb-4">
               <label className="block mb-2 font-semibold">BLOG IMAGE</label>
               <img
                 src={
                   blogImagePreview
                     ? blogImagePreview
-                    : blogImage
-                    ? blogImage
                     : "/imgPL.webp"
                 }
                 alt="Blog Main"
@@ -128,17 +121,18 @@ function UpdateBlog() {
                 onChange={changePhotoHandler}
               />
             </div>
+
             <textarea
               rows="6"
               className="w-full p-2 mb-4 border rounded-md"
-              placeholder="Something about your blog atleast 200 characters!"
+              placeholder="Something about your blog at least 200 characters!"
               value={about}
               onChange={(e) => setAbout(e.target.value)}
             />
 
             <button
+              type="submit"
               className="w-full p-3 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-              onClick={handleUpdate}
             >
               UPDATE
             </button>
