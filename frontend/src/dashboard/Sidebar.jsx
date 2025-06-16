@@ -38,59 +38,58 @@ function Sidebar({ setComponent }) {
     }
   };
 
+  const navOptions = [
+    { label: "MY BLOGS", color: "bg-green-500", action: () => handleComponents("My Blogs") },
+    { label: "CREATE BLOG", color: "bg-blue-500", action: () => handleComponents("Create Blog") },
+    { label: "MY PROFILE", color: "bg-pink-500", action: () => handleComponents("My Profile") },
+    { label: "HOME", color: "bg-yellow-500", action: gotoHome },
+    { label: "LOGOUT", color: "bg-red-500", action: handleLogout },
+  ];
+
   return (
     <>
       {/* Top Navbar */}
-      <div className="bg-white shadow-md px-4 py-3 flex items-center justify-between sticky top-0 z-50">
-        <div className="flex items-center gap-3">
-          <img
-            src={profile?.user?.photo?.url}
-            alt="profile"
-            className="w-10 h-10 rounded-full border border-gray-300"
-          />
-          <span className="text-base font-semibold text-gray-700">{profile?.user?.name}</span>
-        </div>
+      <div className="bg-white shadow-md px-4 py-4 sticky top-0 z-50">
+        <div className="flex flex-col items-center">
+          {/* Profile Info */}
+          <div className="flex items-center gap-3 mb-3">
+            <img
+              src={profile?.user?.photo?.url}
+              alt="profile"
+              className="w-10 h-10 rounded-full border border-gray-300"
+            />
+            <span className="text-base font-semibold text-gray-700">{profile?.user?.name}</span>
+          </div>
 
-        {/* Desktop Menu */}
-        <ul className="hidden md:flex space-x-6 font-medium text-gray-800 items-center justify-center text-center">
-          {[
-            ["MY BLOGS", () => handleComponents("My Blogs")],
-            ["CREATE BLOG", () => handleComponents("Create Blog")],
-            ["MY PROFILE", () => handleComponents("My Profile")],
-            ["HOME", gotoHome],
-            ["LOGOUT", handleLogout],
-          ].map(([label, action], idx) => (
-            <li key={idx}>
-              <button
-                onClick={action}
-                className="transition-all duration-300 hover:text-blue-600 hover:scale-105"
-              >
-                {label}
-              </button>
-            </li>
-          ))}
-        </ul>
+          {/* Desktop Menu */}
+          <ul className="hidden md:flex flex-wrap justify-center items-center gap-4">
+            {navOptions.map(({ label, color, action }, idx) => (
+              <li key={idx}>
+                <button
+                  onClick={action}
+                  className={`text-white px-4 py-2 rounded-lg ${color} transition-all duration-300 hover:brightness-90 hover:scale-105`}
+                >
+                  {label}
+                </button>
+              </li>
+            ))}
+          </ul>
 
-        {/* Mobile Hamburger */}
-        <div className="md:hidden text-2xl" onClick={() => setShow(!show)}>
-          {show ? <IoClose /> : <CiMenuBurger />}
+          {/* Mobile Toggle */}
+          <div className="md:hidden text-2xl mt-2" onClick={() => setShow(!show)}>
+            {show ? <IoClose /> : <CiMenuBurger />}
+          </div>
         </div>
       </div>
 
       {/* Mobile Menu */}
       {show && (
-        <div className="md:hidden bg-white shadow-md px-6 py-4 flex flex-col items-center space-y-4 text-gray-700 font-medium">
-          {[
-            ["MY BLOGS", () => handleComponents("My Blogs")],
-            ["CREATE BLOG", () => handleComponents("Create Blog")],
-            ["MY PROFILE", () => handleComponents("My Profile")],
-            ["HOME", gotoHome],
-            ["LOGOUT", handleLogout],
-          ].map(([label, action], idx) => (
+        <div className="md:hidden bg-white shadow-md px-6 py-4 flex flex-col items-center space-y-4">
+          {navOptions.map(({ label, color, action }, idx) => (
             <button
               key={idx}
               onClick={action}
-              className="transition-all duration-300 hover:text-blue-600 hover:scale-105"
+              className={`w-full text-white px-4 py-2 rounded-lg ${color} transition-all duration-300 hover:brightness-90 hover:scale-105`}
             >
               {label}
             </button>
