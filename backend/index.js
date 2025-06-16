@@ -19,7 +19,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "https://blogging-website-quhd2iqrr-prateeks-projects-2488e01e.vercel.app",
+    origin: "https://blogging-website-silk-kappa.vercel.app",
     credentials: true,
   })
 );
