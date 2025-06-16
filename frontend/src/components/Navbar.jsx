@@ -5,19 +5,17 @@ import { IoCloseSharp } from "react-icons/io5";
 import { useAuth } from "../context/AuthProvider";
 import axios from "axios";
 import toast from "react-hot-toast";
-
+import { BACKEND_URL } from "../util";
 function Navbar() {
   const [show, setShow] = useState(false);
   const { profile, isAuthenticated, setIsAuthenticated } = useAuth();
   const navigateTo = useNavigate();
-
   const handleLogout = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.get(
-        "http://localhost:4001/api/users/logout",
-        { withCredentials: true }
-      );
+      const { data } = await axios.get(`${BACKEND_URL}/api/users/logout`, {
+        withCredentials: true,
+      });
       localStorage.removeItem("jwt");
       toast.success(data.message);
       setIsAuthenticated(false);
@@ -91,19 +89,39 @@ function Navbar() {
         {show && (
           <div className="bg-black text-white md:hidden w-full">
             <ul className="flex flex-col items-center space-y-6 py-8 text-lg font-medium">
-              <Link to="/" onClick={() => setShow(false)} className="hover:text-blue-400">
+              <Link
+                to="/"
+                onClick={() => setShow(false)}
+                className="hover:text-blue-400"
+              >
                 HOME
               </Link>
-              <Link to="/blogs" onClick={() => setShow(false)} className="hover:text-blue-400">
+              <Link
+                to="/blogs"
+                onClick={() => setShow(false)}
+                className="hover:text-blue-400"
+              >
                 BLOGS
               </Link>
-              <Link to="/creators" onClick={() => setShow(false)} className="hover:text-blue-400">
+              <Link
+                to="/creators"
+                onClick={() => setShow(false)}
+                className="hover:text-blue-400"
+              >
                 CREATORS
               </Link>
-              <Link to="/about" onClick={() => setShow(false)} className="hover:text-blue-400">
+              <Link
+                to="/about"
+                onClick={() => setShow(false)}
+                className="hover:text-blue-400"
+              >
                 ABOUT
               </Link>
-              <Link to="/contact" onClick={() => setShow(false)} className="hover:text-blue-400">
+              <Link
+                to="/contact"
+                onClick={() => setShow(false)}
+                className="hover:text-blue-400"
+              >
                 CONTACT
               </Link>
               {!isAuthenticated ? (
