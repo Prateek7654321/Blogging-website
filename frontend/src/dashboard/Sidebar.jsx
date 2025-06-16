@@ -5,7 +5,7 @@ import axios from "axios";
 import { CiMenuBurger } from "react-icons/ci";
 import { BiSolidLeftArrowAlt } from "react-icons/bi";
 import toast from "react-hot-toast";
-import { BACKEND_URL } from "../util"; // use your deployed URL
+import { BACKEND_URL } from "../util.js"; // use your deployed URL
 
 function Sidebar({ setComponent }) {
   const { profile, setIsAuthenticated } = useAuth();

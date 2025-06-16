@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthProvider";
-import { BACKEND_URL } from "../util"; 
+import { BACKEND_URL } from "../util.js"; 
 function Login() {
   const { isAuthenticated, setIsAuthenticated, setProfile } = useAuth();
 

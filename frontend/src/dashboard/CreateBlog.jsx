@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
-import { BACKEND_URL } from "../util"; // adjust path if needed
+import { BACKEND_URL } from "../util.js"; // adjust path if needed
 
 function CreateBlog() {
   const [title, setTitle] = useState("");

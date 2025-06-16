@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
-import { BACKEND_URL } from "../util";
+import { BACKEND_URL } from "../util.js";
 function Detail() {
   const { id } = useParams();
   const [blogs, setblogs] = useState({});
