@@ -5,70 +5,67 @@ import axios from "axios";
 import { CiMenuBurger } from "react-icons/ci";
 import { BiSolidLeftArrowAlt } from "react-icons/bi";
 import toast from "react-hot-toast";
-import { BACKEND_URL } from "../util.js"; // use your deployed URL
+import { BACKEND_URL } from "../util";
 
 function Sidebar({ setComponent }) {
   const { profile, setIsAuthenticated } = useAuth();
+  // console.log(profile?.user);
   const navigateTo = useNavigate();
-  const [show, setShow] = useState(false);
-  const [hovering, setHovering] = useState(false);
 
-  const handleComponents = (value) => setComponent(value);
-  const gotoHome = () => navigateTo("/");
+  const [show, setShow] = useState(false);
+
+  const handleComponents = (value) => {
+    setComponent(value);
+  };
+  const gotoHome = () => {
+    navigateTo("/");
+  };
 
   const handleLogout = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.get(`${BACKEND_URL}/api/users/logout`, {
-        withCredentials: true,
-      });
+      const { data } = await axios.get(
+        `${BACKEND_URL}/api/users/logout`,
+        { withCredentials: true }
+      );
       toast.success(data.message);
-      localStorage.removeItem("jwt");
+       localStorage.removeItem("jwt"); // deleting token in localStorage so that if user logged out it will goes to login page
       setIsAuthenticated(false);
       navigateTo("/login");
     } catch (error) {
-      toast.error(error?.response?.data?.message || "Failed to logout");
+      console.log(error);
+      toast.error(error.data.message || "Failed to logout");
     }
   };
 
   return (
     <>
-      {/* Toggle button */}
       <div
-        className="fixed top-4 left-4 z-50 sm:hidden"
+        className="sm:hidden fixed top-4 left-4 z-50"
         onClick={() => setShow(!show)}
       >
-        <CiMenuBurger className="text-2xl cursor-pointer" />
+        <CiMenuBurger className="text-2xl" />
       </div>
-
-      {/* Sidebar */}
       <div
-        className={`w-64 h-full shadow-lg fixed top-0 left-0 bg-gray-50 transition-transform duration-300 z-40
-          ${show || hovering ? "translate-x-0" : "-translate-x-full"}
-        `}
-        onMouseEnter={() => setHovering(true)}
-        onMouseLeave={() => setHovering(false)}
+        className={`w-64 h-full shadow-lg fixed top-0 left-0 bg-gray-50 transition-transform duration-300 transform sm:translate-x-0 ${
+          show ? "translate-x-0" : "-translate-x-full"
+        }`}
       >
-        {/* Hide icon for mobile */}
         <div
           className="sm:hidden absolute top-4 right-4 text-xl cursor-pointer"
-          onClick={() => setShow(false)}
+          onClick={() => setShow(!show)}
         >
           <BiSolidLeftArrowAlt className="text-2xl" />
         </div>
-
-        {/* Profile */}
-        <div className="text-center mt-8">
+        <div className="text-center">
           <img
-            className="w-24 h-24 rounded-full mx-auto mb-2 object-cover"
+            className="w-24 h-24 rounded-full mx-auto mb-2"
             src={profile?.user?.photo?.url}
-            alt="profile"
+            alt=""
           />
           <p className="text-lg font-semibold">{profile?.user?.name}</p>
         </div>
-
-        {/* Menu */}
-        <ul className="space-y-6 mx-4 mt-10">
+        <ul className="space-y-6 mx-4">
           <button
             onClick={() => handleComponents("My Blogs")}
             className="w-full px-4 py-2 bg-green-500 rounded-lg hover:bg-green-700 transition duration-300"
