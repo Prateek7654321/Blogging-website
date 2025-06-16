@@ -14,7 +14,7 @@ function Sidebar({ setComponent }) {
 
   const handleComponents = (value) => {
     setComponent(value);
-    setShow(false); // close mobile menu on click
+    setShow(false);
   };
 
   const gotoHome = () => {
@@ -41,48 +41,34 @@ function Sidebar({ setComponent }) {
   return (
     <>
       {/* Top Navbar */}
-      <div className="bg-white shadow-md px-6 py-4 flex items-center justify-between sticky top-0 z-50">
+      <div className="bg-white shadow-md px-4 py-3 flex items-center justify-between sticky top-0 z-50">
         <div className="flex items-center gap-3">
           <img
             src={profile?.user?.photo?.url}
             alt="profile"
             className="w-10 h-10 rounded-full border border-gray-300"
           />
-          <span className="text-lg font-semibold">{profile?.user?.name}</span>
+          <span className="text-base font-semibold text-gray-700">{profile?.user?.name}</span>
         </div>
 
         {/* Desktop Menu */}
-        <ul className="hidden md:flex space-x-4 font-medium text-gray-700">
-          <button
-            onClick={() => handleComponents("My Blogs")}
-            className="hover:text-blue-600 transition"
-          >
-            MY BLOGS
-          </button>
-          <button
-            onClick={() => handleComponents("Create Blog")}
-            className="hover:text-blue-600 transition"
-          >
-            CREATE BLOG
-          </button>
-          <button
-            onClick={() => handleComponents("My Profile")}
-            className="hover:text-blue-600 transition"
-          >
-            MY PROFILE
-          </button>
-          <button
-            onClick={gotoHome}
-            className="hover:text-blue-600 transition"
-          >
-            HOME
-          </button>
-          <button
-            onClick={handleLogout}
-            className="hover:text-red-600 transition"
-          >
-            LOGOUT
-          </button>
+        <ul className="hidden md:flex space-x-6 font-medium text-gray-800 items-center justify-center text-center">
+          {[
+            ["MY BLOGS", () => handleComponents("My Blogs")],
+            ["CREATE BLOG", () => handleComponents("Create Blog")],
+            ["MY PROFILE", () => handleComponents("My Profile")],
+            ["HOME", gotoHome],
+            ["LOGOUT", handleLogout],
+          ].map(([label, action], idx) => (
+            <li key={idx}>
+              <button
+                onClick={action}
+                className="transition-all duration-300 hover:text-blue-600 hover:scale-105"
+              >
+                {label}
+              </button>
+            </li>
+          ))}
         </ul>
 
         {/* Mobile Hamburger */}
@@ -91,39 +77,24 @@ function Sidebar({ setComponent }) {
         </div>
       </div>
 
-      {/* Mobile Dropdown Menu */}
+      {/* Mobile Menu */}
       {show && (
-        <div className="md:hidden bg-white shadow-md px-6 py-4 space-y-4 font-medium text-gray-700">
-          <button
-            onClick={() => handleComponents("My Blogs")}
-            className="block w-full text-left hover:text-blue-600"
-          >
-            MY BLOGS
-          </button>
-          <button
-            onClick={() => handleComponents("Create Blog")}
-            className="block w-full text-left hover:text-blue-600"
-          >
-            CREATE BLOG
-          </button>
-          <button
-            onClick={() => handleComponents("My Profile")}
-            className="block w-full text-left hover:text-blue-600"
-          >
-            MY PROFILE
-          </button>
-          <button
-            onClick={gotoHome}
-            className="block w-full text-left hover:text-blue-600"
-          >
-            HOME
-          </button>
-          <button
-            onClick={handleLogout}
-            className="block w-full text-left hover:text-red-600"
-          >
-            LOGOUT
-          </button>
+        <div className="md:hidden bg-white shadow-md px-6 py-4 flex flex-col items-center space-y-4 text-gray-700 font-medium">
+          {[
+            ["MY BLOGS", () => handleComponents("My Blogs")],
+            ["CREATE BLOG", () => handleComponents("Create Blog")],
+            ["MY PROFILE", () => handleComponents("My Profile")],
+            ["HOME", gotoHome],
+            ["LOGOUT", handleLogout],
+          ].map(([label, action], idx) => (
+            <button
+              key={idx}
+              onClick={action}
+              className="transition-all duration-300 hover:text-blue-600 hover:scale-105"
+            >
+              {label}
+            </button>
+          ))}
         </div>
       )}
     </>
