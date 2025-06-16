@@ -17,7 +17,12 @@ const MONGO_URL = process.env.MONGO_URI;
 //middleware
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://blogging-website-quhd2iqrr-prateeks-projects-2488e01e.vercel.app",
+    credentials: true,
+  })
+);
 
 app.use(
   fileUpload({
