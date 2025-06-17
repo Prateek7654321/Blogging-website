@@ -5,7 +5,7 @@ import { BACKEND_URL } from "../util.js"; // import the backend URL
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [blogs, setBlogs] = useState();
+  const [blogs, setBlogs] = useState([]);
   const [profile, setProfile] = useState();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
