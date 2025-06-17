@@ -1,19 +1,46 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Poppins:wght@300;400&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Poppins:wght@300;400&family=Roboto:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-body{
+@layer base {
+  body {
     font-family: 'Poppins', sans-serif;
-    background-color:#f5f5f5
-   
-}
-h1,h2,h3,h4,h5,h6{
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+  }
+
+  /* Subtle animated gradient (optional) */
+  body::before {
+    content: "";
+    position: fixed;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+    animation: gradientPulse 15s ease infinite;
+    z-index: -1;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
     font-family: 'Roboto', sans-serif;
+    @apply font-bold;
+  }
+
+  span {
+    font-family: 'Fredoka', sans-serif;
+  }
 }
 
-span{
-    font-family: 'Fredoka', sans-serif;
+@keyframes gradientPulse {
+  0% { transform: translate(0, 0); }
+  50% { transform: translate(50px, 50px); }
+  100% { transform: translate(0, 0); }
 }
