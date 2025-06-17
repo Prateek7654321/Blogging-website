@@ -26,7 +26,7 @@ function App() {
   console.log(isAuthenticated); // it is not using because every page refresh it was redirected to /login
 
   return (
-    <div>
+    <div className="min-h-screen bg-blog-gradient bg-fixed bg-cover">
       {!hideNavbarFooter && <Navbar />}
       <Routes>
         <Route
